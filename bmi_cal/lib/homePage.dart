@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:bmi_cal/const.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int height = 150;
+  int weight = 50;
+
+  late double bmi = calculateBmi(height: height, weight: weight);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +115,7 @@ class _HomePageState extends State<HomePage> {
               // Height and widht button
 
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Row(
                   children: [
                     Column(
@@ -120,25 +127,33 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         Text(
-                          '135',
+                          '$height',
                           style: GoogleFonts.poppins(
                             textStyle: kResultText,
                           ),
                         ),
+
+                        // height
                         Row(
-                          children: const [
+                          children: [
                             SizedBox(
                               width: 50.0,
                               height: 50.0,
                               child: FloatingActionButton(
-                                onPressed: null,
-                                child: Icon(
+                                onPressed: () {
+                                  setState(() {
+                                    if (height < 220) height++;
+                                    bmi = calculateBmi(
+                                        height: height, weight: weight);
+                                  });
+                                },
+                                child: const Icon(
                                   Icons.add,
                                   size: 40,
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             SizedBox(
@@ -146,8 +161,14 @@ class _HomePageState extends State<HomePage> {
                               height: 50.0,
                               child: FloatingActionButton(
                                 focusColor: Color.fromARGB(255, 208, 255, 0),
-                                onPressed: null,
-                                child: Icon(
+                                onPressed: () {
+                                  setState(() {
+                                    if (height > 50) height--;
+                                    bmi = calculateBmi(
+                                        height: height, weight: weight);
+                                  });
+                                },
+                                child: const Icon(
                                   Icons.remove,
                                   size: 40,
                                 ),
@@ -157,27 +178,36 @@ class _HomePageState extends State<HomePage> {
                         )
                       ],
                     ),
+                    Spacer(),
                     Column(
                       children: [
                         Text(
-                          'Height',
+                          'Weight',
                           style: GoogleFonts.poppins(
                             textStyle: kTextStyle,
                           ),
                         ),
                         Text(
-                          '135',
+                          '$weight',
                           style: GoogleFonts.poppins(
                             textStyle: kResultText,
                           ),
                         ),
                         Row(
-                          children: const [
+                          children: [
                             SizedBox(
                               width: 50.0,
                               height: 50.0,
                               child: FloatingActionButton(
-                                onPressed: null,
+                                onPressed: () {
+                                  setState(() {
+                                    if (weight < 200) {
+                                      weight++;
+                                      bmi = calculateBmi(
+                                          height: height, weight: weight);
+                                    }
+                                  });
+                                },
                                 child: Icon(
                                   Icons.add,
                                   size: 40,
@@ -192,7 +222,13 @@ class _HomePageState extends State<HomePage> {
                               height: 50.0,
                               child: FloatingActionButton(
                                 focusColor: Color.fromARGB(255, 208, 255, 0),
-                                onPressed: null,
+                                onPressed: () {
+                                  setState(() {
+                                    if (weight > 20) weight--;
+                                    bmi = calculateBmi(
+                                        height: height, weight: weight);
+                                  });
+                                },
                                 child: Icon(
                                   Icons.remove,
                                   size: 40,
@@ -206,10 +242,64 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'YOUR BMI ',
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.poppins(
+                      textStyle: kResultText2,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "${bmi.toStringAsFixed(2)}",
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.poppins(
+                      textStyle: kResultText3,
+                    ),
+                  ),
+                  Text(
+                    getResult(bmi),
+                    textAlign: TextAlign.left,
+                    style: GoogleFonts.poppins(
+                      textStyle: kResultText3,
+                    ),
+                  )
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
+
+    // double calculateBmi({required int height, required int weight}) {
+    //   weight / (height * height);
+    // }
+  }
+
+  double calculateBmi({required int height, required int weight}) {
+    return (weight / (height * height)) * 10000;
+  }
+
+  String getResult(bmiValue) {
+    if (bmiValue >= 25) {
+      return 'Over Weight ';
+    } else if (bmiValue > 18.5) {
+      return 'Normal';
+    } else {
+      return 'Under weight';
+    }
   }
 }

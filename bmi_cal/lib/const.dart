@@ -14,3 +14,15 @@ const kResultText = TextStyle(
     letterSpacing: .5,
     fontSize: 30,
     fontWeight: FontWeight.w600);
+
+const kResultText2 = TextStyle(
+    color: Color.fromARGB(255, 255, 187, 0),
+    letterSpacing: .5,
+    fontSize: 30,
+    fontWeight: FontWeight.w600);
+
+const kResultText3 = TextStyle(
+    color: Color.fromARGB(255, 21, 255, 0),
+    letterSpacing: .5,
+    fontSize: 50,
+    fontWeight: FontWeight.w600);
